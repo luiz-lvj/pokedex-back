@@ -7,7 +7,7 @@ export default class Session{
     id: number;
 
     @Column()
-    token: number;
+    token: string;
 
     @ManyToOne(() => User, user => user.userSessions)
     @JoinColumn({ name: 'userId' })
