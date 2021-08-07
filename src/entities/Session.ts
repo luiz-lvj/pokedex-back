@@ -12,5 +12,4 @@ export default class Session{
     @ManyToOne(() => User, user => user.userSessions)
     @JoinColumn({ name: 'userId' })
     user: User;
-
 }

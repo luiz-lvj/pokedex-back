@@ -31,7 +31,8 @@ export async function validLogin(email: string, password: string): Promise<[bool
         const token = await generateToken(user);
         return [true, token];
 
-    } catch{
+    } catch (err){
+        console.log(err)
         return [false, ""];
     }
 }
