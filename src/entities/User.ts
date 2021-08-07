@@ -7,11 +7,11 @@ export default class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true })
-    name: string;
-    
     @Column()
     email: string;
+
+    @Column()
+    hashPassword: string;
 
     @OneToMany(() => Session, session => session.user)
     userSessions: Session[];

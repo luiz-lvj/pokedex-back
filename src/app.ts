@@ -5,7 +5,7 @@ import cors from "cors";
 import "reflect-metadata";
 
 import connectDatabase from "./database";
-import signUpRouter from "./routers/SignUp";
+import signUpRouter from "./routers/signUpRouter";
 
 
 const app = express();
