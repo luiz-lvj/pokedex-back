@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import User from "./User";
 
-@Entity('sessions')
+@Entity('userSessions')
 export default class Session{
     @PrimaryGeneratedColumn()
     id: number;
@@ -9,7 +9,7 @@ export default class Session{
     @Column()
     token: number;
 
-    @ManyToOne(() => User, user => user.sessions)
+    @ManyToOne(() => User, user => user.userSessions)
     @JoinColumn({ name: 'userId' })
     user: User;
 

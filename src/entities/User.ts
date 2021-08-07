@@ -14,7 +14,7 @@ export default class User {
     email: string;
 
     @OneToMany(() => Session, session => session.user)
-    sessions: Session[];
+    userSessions: Session[];
 
     @ManyToMany(() => Pokemon, pokemon => pokemon.users)
     pokemons: Pokemon[];
