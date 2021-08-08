@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as userService from "../services/userService";
 
-export async function signUp(req: Request, res: Response){
+export async function signUp(req: Request, res: Response): Promise<Response>{
     try{
         if(!req.body.email || !req.body.password || !req.body.confirmPassword){
             return res.sendStatus(400);
