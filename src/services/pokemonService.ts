@@ -37,13 +37,7 @@ export async function getPokemons(): Promise<Pokemon[]>{
 
 export async function getMyPokemons(userId: number): Promise<PokemonBool[]>{
     const allPokemons: Pokemon[] = await getPokemons();
-    const user = await getRepository(User).findOne({
-        relations: ["pokemons"],
-        where: {
-            id: userId
-        }
-    });
-    const myPokemonsIds: number[] = user.pokemons.map(pokemon => pokemon.id);
+    const myPokemonsIds: number[] = await getMyPokemonsIds(userId);
     const pokemonsWithBool: PokemonBool[] = allPokemons.map(pokemon => {
         const inMyPokemons: boolean = myPokemonsIds.includes(pokemon.id);
         const newPokemon: PokemonBool = {...pokemon,
@@ -52,4 +46,38 @@ export async function getMyPokemons(userId: number): Promise<PokemonBool[]>{
         return newPokemon;
     });
     return pokemonsWithBool;
+}
+
+export async function setMyPokemons(userId: number, pokemons: Pokemon[]): Promise<void>{
+    await getRepository(User).update({id: userId}, {pokemons: pokemons});
+}
+
+export async function getPokemonList(pokemonsIds: number[]): Promise<Pokemon[]>{
+    const pokemons = await Promise.all(pokemonsIds.map(async (pokemonId: number) => {
+        const pokemon = await getRepository(Pokemon).findOne({
+            where: {
+                id: pokemonId
+            }
+        });
+        return pokemon;
+    }));
+    return pokemons;
+}
+
+export async function isValidPokemonId(id: number): Promise<boolean>{
+    const numPokemons: number = await getRepository(Pokemon).count({
+        id: id
+    });
+    return numPokemons === 1;
+}
+
+export async function getMyPokemonsIds(userId: number): Promise<number[]>{
+    const user = await getRepository(User).findOne({
+        relations: ["pokemons"],
+        where: {
+            id: userId
+        }
+    });
+    const myPokemonsIds: number[] = user.pokemons.map(pokemon => pokemon.id);
+    return myPokemonsIds;
 }
