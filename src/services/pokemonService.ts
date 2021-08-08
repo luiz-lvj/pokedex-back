@@ -49,7 +49,14 @@ export async function getMyPokemons(userId: number): Promise<PokemonBool[]>{
 }
 
 export async function setMyPokemons(userId: number, pokemons: Pokemon[]): Promise<void>{
-    await getRepository(User).update({id: userId}, {pokemons: pokemons});
+    const user = await getRepository(User).findOne({
+        relations: ["pokemons"],
+        where: {
+            id: userId
+        }
+    });
+    user.pokemons = pokemons;
+    await getRepository(User).save(user);
 }
 
 export async function getPokemonList(pokemonsIds: number[]): Promise<Pokemon[]>{

@@ -5,10 +5,10 @@ import Pokemon from "../entities/Pokemon";
 export async function addPokemon(req: Request, res: Response): Promise<Response>{
     try{
         const auth: string = req.headers.authorization;
-        if(!req.body.id || !auth){
+        if(!req.params.id || !auth){
             return res.sendStatus(400);
         }
-        const pokemonId: number = parseInt(req.body.id);
+        const pokemonId: number = parseInt(req.params.id);
         if(isNaN(pokemonId) || !(await pokemonService.isValidPokemonId(pokemonId))){
             return res.sendStatus(400);
         }
@@ -21,17 +21,18 @@ export async function addPokemon(req: Request, res: Response): Promise<Response>
         myPokemonsIds = [...myPokemonsIds, pokemonId];
         const myPokemons: Pokemon[] = await pokemonService.getPokemonList(myPokemonsIds);
         await pokemonService.setMyPokemons(userId, myPokemons);
-    } catch{
+        return res.sendStatus(200);
+    } catch(err){
         return res.sendStatus(500);
     }
 }
 export async function removePokemon(req: Request, res: Response): Promise<Response>{
     try{
         const auth: string = req.headers.authorization;
-        if(!req.body.id || !auth){
+        if(!req.params.id || !auth){
             return res.sendStatus(400);
         }
-        const pokemonId: number = parseInt(req.body.id);
+        const pokemonId: number = parseInt(req.params.id);
         if(isNaN(pokemonId) || !(await pokemonService.isValidPokemonId(pokemonId))){
             return res.sendStatus(400);
         }
@@ -49,6 +50,7 @@ export async function removePokemon(req: Request, res: Response): Promise<Respon
         });
         const myPokemons: Pokemon[] = await pokemonService.getPokemonList(myPokemonsIds);
         await pokemonService.setMyPokemons(userId, myPokemons);
+        return res.sendStatus(200);
     } catch{
         return res.sendStatus(500);
     }
